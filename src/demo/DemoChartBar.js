@@ -57,7 +57,6 @@ export class DemoChartBar extends React.Component {
                 <svg
                     width = '500px'
                     height = '360px'
-                    overflow = 'visible'
                 >
                     <rect
                         x = '0px'

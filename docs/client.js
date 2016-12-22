@@ -864,12 +864,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
+	var validateFormat = function validateFormat(format) {};
+
+	if (process.env.NODE_ENV !== 'production') {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 
 	  if (!condition) {
 	    var error;
@@ -22122,6 +22128,10 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	exports.calculateFontSize = calculateFontSize;
+	exports.fontSizeIsOverflow = fontSizeIsOverflow;
+	exports.setFontSizeAndWordWrap = setFontSizeAndWordWrap;
+
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -22136,7 +22146,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var isServer = !(window && document && document.body);
+	var isServer = !(typeof window != 'undefined' && window.document);
 
 	var PureConnector = function (_React$Component) {
 	    _inherits(PureConnector, _React$Component);
@@ -22162,6 +22172,160 @@
 	    return PureConnector;
 	}(_react2.default.Component);
 
+	function calculateFontSize(group) {
+	    var minFontSize = 0.5,
+	        maxFontSize = Number.MAX_VALUE;
+	    for (var textItemIndex = group.length; textItemIndex--;) {
+	        var textItemHeight = group[textItemIndex].textItem.height;
+	        if (maxFontSize > textItemHeight) {
+	            maxFontSize = textItemHeight;
+	        }
+	    }
+	    do {
+	        var nextFontSize = (maxFontSize + minFontSize) / 2;
+	        if (fontSizeIsOverflow(group, nextFontSize)) {
+	            maxFontSize = nextFontSize;
+	        } else {
+	            minFontSize = nextFontSize;
+	        }
+	    } while (maxFontSize - minFontSize > 1);
+	    return minFontSize;
+	}
+
+	function fontSizeIsOverflow(group, fontSize) {
+	    for (var textItemIndex = group.length; textItemIndex--;) {
+	        var _group$textItemIndex = group[textItemIndex],
+	            textItem = _group$textItemIndex.textItem,
+	            wordWidths = _group$textItemIndex.wordWidths,
+	            symbolHeight = _group$textItemIndex.symbolHeight,
+	            spaceWidth = _group$textItemIndex.spaceWidth;
+	        var maxWidth = textItem.width,
+	            maxHeight = textItem.height;
+
+	        var wordX = 0,
+	            wordY = 0;
+	        var countInnerTexts = textItem.value.length;
+	        for (var innerTextIndex = 0; innerTextIndex < countInnerTexts; innerTextIndex++) {
+	            var innerText = textItem.value[innerTextIndex];
+	            var weight = innerText.weight,
+	                words = innerText.words;
+
+	            var factor = ~~(weight * fontSize) / maxHeight;
+	            var countWords = words.length;
+	            var wordHeight = symbolHeight * factor;
+	            for (var wordIndex = 0; wordIndex < countWords; wordIndex++) {
+	                var wordWidth = wordWidths['word-' + innerTextIndex + '-' + wordIndex] * factor;
+	                var wordBoundsRight = wordX + wordWidth,
+	                    wordBoundsBottom = wordY + wordHeight;
+	                if (wordBoundsBottom > maxHeight) {
+	                    return true;
+	                }
+	                if (wordBoundsRight > maxWidth) {
+	                    if (wordIndex === 0) {
+	                        return true;
+	                    } else {
+	                        wordX = 0;
+	                        wordY += wordHeight;
+	                        wordBoundsRight = wordX + wordWidth;
+	                        wordBoundsBottom = wordY + wordHeight;
+	                        if (wordBoundsRight > maxWidth || wordBoundsBottom > maxHeight) {
+	                            return true;
+	                        }
+	                    }
+	                }
+	                wordX += wordWidth + spaceWidth * factor;
+	            }
+	            wordX = 0;
+	            wordY += wordHeight;
+	        }
+	    }
+	    return false;
+	}
+
+	function setFontSizeAndWordWrap(group, fontSize) {
+	    for (var textItemIndex = group.length; textItemIndex--;) {
+	        var _group$textItemIndex2 = group[textItemIndex],
+	            textItem = _group$textItemIndex2.textItem,
+	            refs = _group$textItemIndex2.refs,
+	            wordWidths = _group$textItemIndex2.wordWidths,
+	            symbolHeight = _group$textItemIndex2.symbolHeight,
+	            symbolDy = _group$textItemIndex2.symbolDy,
+	            spaceWidth = _group$textItemIndex2.spaceWidth;
+	        var maxWidth = textItem.width,
+	            maxHeight = textItem.height,
+	            x = textItem.x,
+	            y = textItem.y,
+	            textAlign = textItem.textAlign,
+	            verticalAlign = textItem.verticalAlign,
+	            color = textItem.color;
+
+	        var countInnerTexts = textItem.value.length;
+	        var wordX = 0,
+	            wordY = 0;
+	        var rows = [{ elements: [] }],
+	            rowIndex = 0;
+	        for (var innerTextIndex = 0; innerTextIndex < countInnerTexts; innerTextIndex++) {
+	            var innerText = textItem.value[innerTextIndex];
+	            var weight = innerText.weight,
+	                words = innerText.words,
+	                innerColor = innerText.color;
+
+	            var displayFontSize = ~~(fontSize * weight);
+	            var factor = displayFontSize / maxHeight;
+	            var countWords = words.length;
+	            var wordHeight = symbolHeight * factor;
+	            var key = 'words-' + innerTextIndex;
+	            refs[key].setAttribute('font-size', displayFontSize + 'px');
+	            refs[key].setAttribute('fill', color ? color : 'inherit');
+	            for (var wordIndex = 0; wordIndex < countWords; wordIndex++) {
+	                var _key = 'word-' + innerTextIndex + '-' + wordIndex;
+	                var wordWidth = wordWidths[_key] * factor;
+	                var wordBoundsRight = wordX + wordWidth;
+	                var wordBoundsBottom = wordY + wordHeight;
+	                if (wordBoundsRight > maxWidth) {
+	                    rows[++rowIndex] = { elements: [] };
+	                    wordX = 0;
+	                    wordY += wordHeight;
+	                    wordBoundsRight = wordX + wordWidth;
+	                    wordBoundsBottom = wordY + wordHeight;
+	                }
+	                var element = refs[_key];
+	                var row = rows[rowIndex];
+	                row.elements.push(element);
+	                row.width = wordBoundsRight;
+	                row.height = wordHeight;
+	                element.setAttribute('x', x + wordX + 'px');
+	                element.setAttribute('y', y + wordY - symbolDy * factor + 'px');
+	                element.setAttribute('fill', innerColor ? innerColor : 'inherit');
+	                wordX += wordWidth + spaceWidth * factor;
+	            }
+	            wordX = 0;
+	            wordY += wordHeight;
+	            if (innerTextIndex < countInnerTexts - 1) {
+	                rows[++rowIndex] = { elements: [] };
+	            }
+	        }
+	        var countRows = rows.length;
+	        var height = 0;
+	        for (var _rowIndex = countRows; _rowIndex--;) {
+	            height += rows[_rowIndex].height;
+	        }
+	        for (var _rowIndex2 = countRows; _rowIndex2--;) {
+	            var _rows$_rowIndex = rows[_rowIndex2],
+	                width = _rows$_rowIndex.width,
+	                elements = _rows$_rowIndex.elements;
+
+	            var dx = textAlign === 'left' ? 0 : textAlign === 'center' ? (maxWidth - width) / 2 : textAlign === 'right' ? maxWidth - width : 0;
+	            var dy = verticalAlign === 'top' ? 0 : verticalAlign === 'middle' ? (maxHeight - height) / 2 : verticalAlign === 'bottom' ? maxHeight - height : 0;
+	            var countElements = elements.length;
+	            for (var elementIndex = countElements; elementIndex--;) {
+	                elements[elementIndex].setAttribute('dx', dx);
+	                elements[elementIndex].setAttribute('dy', dy);
+	            }
+	        }
+	    }
+	}
+
 	var TextResizeAndWordWrapProvider = exports.TextResizeAndWordWrapProvider = function (_Component) {
 	    _inherits(TextResizeAndWordWrapProvider, _Component);
 
@@ -22172,171 +22336,11 @@
 
 	        _classCallCheck(this, TextResizeAndWordWrapProvider);
 
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
+	        for (var _len = arguments.length, args = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+	            args[_key2] = arguments[_key2];
 	        }
 
-	        return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = TextResizeAndWordWrapProvider.__proto__ || Object.getPrototypeOf(TextResizeAndWordWrapProvider)).call.apply(_ref, [this].concat(args))), _this2), _this2.groups = {}, _this2.resize = function () {
-	            if (isServer || !_this2.needUpdate) {
-	                return;
-	            }
-	            _this2.needUpdate = false;
-	            var groups = _this2.groups;
-	            for (var groupId in groups) {
-	                var group = groups[groupId];
-	                var countTextItemsInGroup = group.length;
-	                var minFontSize = 0.5,
-	                    maxFontSize = Number.MAX_VALUE;
-	                for (var textItemIndex = countTextItemsInGroup; textItemIndex--;) {
-	                    var textItemHeight = group[textItemIndex].textItem.height;
-	                    if (maxFontSize > textItemHeight) {
-	                        maxFontSize = textItemHeight;
-	                    }
-	                }
-	                //Calculate FontSize
-	                do {
-	                    var isOverflow = false;
-	                    var nextFontSize = (maxFontSize + minFontSize) / 2;
-	                    LOOP: for (var _textItemIndex = 0; _textItemIndex < countTextItemsInGroup; _textItemIndex++) {
-	                        var _group$_textItemIndex = group[_textItemIndex],
-	                            textItem = _group$_textItemIndex.textItem,
-	                            wordWidths = _group$_textItemIndex.wordWidths,
-	                            symbolHeight = _group$_textItemIndex.symbolHeight,
-	                            spaceWidth = _group$_textItemIndex.spaceWidth;
-	                        var maxWidth = textItem.width,
-	                            maxHeight = textItem.height,
-	                            x = textItem.x,
-	                            y = textItem.y;
-
-	                        var wordX = 0,
-	                            wordY = 0;
-	                        var countInnerTexts = textItem.value.length;
-	                        for (var innerTextIndex = 0; innerTextIndex < countInnerTexts; innerTextIndex++) {
-	                            var innerText = textItem.value[innerTextIndex];
-	                            var weight = innerText.weight,
-	                                words = innerText.words;
-
-	                            var factor = ~~(weight * nextFontSize) / maxHeight;
-	                            var countWords = words.length;
-	                            var wordHeight = symbolHeight * factor;
-	                            for (var wordIndex = 0; wordIndex < countWords; wordIndex++) {
-	                                var wordWidth = wordWidths['word-' + innerTextIndex + '-' + wordIndex] * factor;
-	                                var wordBoundsRight = wordX + wordWidth,
-	                                    wordBoundsBottom = wordY + wordHeight;
-	                                if (wordBoundsBottom > maxHeight) {
-	                                    isOverflow = true;
-	                                    break LOOP;
-	                                }
-	                                if (wordBoundsRight > maxWidth) {
-	                                    if (wordIndex === 0) {
-	                                        isOverflow = true;
-	                                        break LOOP;
-	                                    } else {
-	                                        wordX = 0;
-	                                        wordY += wordHeight;
-	                                        wordBoundsRight = wordX + wordWidth;
-	                                        wordBoundsBottom = wordY + wordHeight;
-	                                        if (wordBoundsRight > maxWidth || wordBoundsBottom > maxHeight) {
-	                                            isOverflow = true;
-	                                            break LOOP;
-	                                        }
-	                                    }
-	                                }
-	                                wordX += wordWidth + spaceWidth * factor;
-	                            }
-	                            wordX = 0;
-	                            wordY += wordHeight;
-	                        }
-	                    }
-	                    if (isOverflow) {
-	                        maxFontSize = nextFontSize;
-	                    } else {
-	                        minFontSize = nextFontSize;
-	                    }
-	                } while (maxFontSize - minFontSize > 1);
-	                //Set FontSize
-	                for (var _textItemIndex2 = 0; _textItemIndex2 < countTextItemsInGroup; _textItemIndex2++) {
-	                    var _group$_textItemIndex2 = group[_textItemIndex2],
-	                        textItem = _group$_textItemIndex2.textItem,
-	                        refs = _group$_textItemIndex2.refs,
-	                        wordWidths = _group$_textItemIndex2.wordWidths,
-	                        symbolHeight = _group$_textItemIndex2.symbolHeight,
-	                        symbolDy = _group$_textItemIndex2.symbolDy,
-	                        spaceWidth = _group$_textItemIndex2.spaceWidth;
-	                    var maxWidth = textItem.width,
-	                        maxHeight = textItem.height,
-	                        x = textItem.x,
-	                        y = textItem.y,
-	                        textAlign = textItem.textAlign,
-	                        verticalAlign = textItem.verticalAlign,
-	                        color = textItem.color;
-
-	                    var _countInnerTexts = textItem.value.length;
-	                    var _wordX = 0,
-	                        _wordY = 0;
-	                    var rows = [{ elements: [] }],
-	                        rowIndex = 0;
-	                    for (var _innerTextIndex = 0; _innerTextIndex < _countInnerTexts; _innerTextIndex++) {
-	                        var _innerText = textItem.value[_innerTextIndex];
-	                        var weight = _innerText.weight,
-	                            words = _innerText.words,
-	                            innerColor = _innerText.color;
-
-	                        var _factor = ~~(weight * minFontSize) / maxHeight;
-	                        var _countWords = words.length;
-	                        var _wordHeight = symbolHeight * _factor;
-	                        var key = 'words-' + _innerTextIndex;
-	                        refs[key].setAttribute('font-size', ~~(minFontSize * weight) + 'px');
-	                        refs[key].setAttribute('fill', color ? color : 'inherit');
-	                        for (var _wordIndex = 0; _wordIndex < _countWords; _wordIndex++) {
-	                            var _key2 = 'word-' + _innerTextIndex + '-' + _wordIndex;
-	                            var _wordWidth = wordWidths[_key2] * _factor;
-	                            var _wordBoundsRight = _wordX + _wordWidth;
-	                            var _wordBoundsBottom = _wordY + _wordHeight;
-	                            if (_wordBoundsRight > maxWidth) {
-	                                rows[++rowIndex] = { elements: [] };
-	                                _wordX = 0;
-	                                _wordY += _wordHeight;
-	                                _wordBoundsRight = _wordX + _wordWidth;
-	                                _wordBoundsBottom = _wordY + _wordHeight;
-	                            }
-	                            var element = refs[_key2];
-	                            var row = rows[rowIndex];
-	                            row.elements.push(element);
-	                            row.width = _wordBoundsRight;
-	                            row.height = _wordHeight;
-	                            element.setAttribute('x', x + _wordX + 'px');
-	                            element.setAttribute('y', y + _wordY - symbolDy * _factor + 'px');
-	                            element.setAttribute('fill', innerColor ? innerColor : 'inherit');
-	                            _wordX += _wordWidth + spaceWidth * _factor;
-	                        }
-	                        _wordX = 0;
-	                        _wordY += _wordHeight;
-	                        if (_innerTextIndex < _countInnerTexts - 1) {
-	                            rows[++rowIndex] = { elements: [] };
-	                        }
-	                    }
-	                    var countRows = rows.length;
-	                    var height = 0;
-	                    for (var _rowIndex = countRows; _rowIndex--;) {
-	                        height += rows[_rowIndex].height;
-	                    }
-	                    for (var _rowIndex2 = countRows; _rowIndex2--;) {
-	                        var _rows$_rowIndex = rows[_rowIndex2],
-	                            width = _rows$_rowIndex.width,
-	                            elements = _rows$_rowIndex.elements;
-
-	                        var dx = textAlign === 'left' ? 0 : textAlign === 'center' ? (maxWidth - width) / 2 : textAlign === 'right' ? maxWidth - width : 0;
-	                        var dy = verticalAlign === 'top' ? 0 : verticalAlign === 'middle' ? (maxHeight - height) / 2 : verticalAlign === 'bottom' ? maxHeight - height : 0;
-	                        var countElements = elements.length;
-	                        for (var elementIndex = countElements; elementIndex--;) {
-	                            elements[elementIndex].setAttribute('dx', dx);
-	                            elements[elementIndex].setAttribute('dy', dy);
-	                        }
-	                    }
-	                }
-	            }
-	        }, _this2.addTextItem = function (instance) {
+	        return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = TextResizeAndWordWrapProvider.__proto__ || Object.getPrototypeOf(TextResizeAndWordWrapProvider)).call.apply(_ref, [this].concat(args))), _this2), _this2.groups = {}, _this2.addTextItem = function (instance) {
 	            var groupId = instance.textItem.group;
 	            _this2.addTextItemToGroup(instance, groupId);
 	            _this2.optionalForceUpdate();
@@ -22358,14 +22362,27 @@
 	    }
 
 	    _createClass(TextResizeAndWordWrapProvider, [{
+	        key: 'resizeAndWordWrap',
+	        value: function resizeAndWordWrap() {
+	            if (isServer || !this.needUpdate) {
+	                return;
+	            }
+	            this.needUpdate = false;
+	            var groups = this.groups;
+	            for (var groupId in groups) {
+	                var group = groups[groupId];
+	                setFontSizeAndWordWrap(group, calculateFontSize(group));
+	            }
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            this.resize();
+	            this.resizeAndWordWrap();
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            this.resize();
+	            this.resizeAndWordWrap();
 	        }
 	    }, {
 	        key: 'render',
@@ -22410,14 +22427,7 @@
 	    return TextResizeAndWordWrapProvider;
 	}(_Component2.Component);
 
-	TextResizeAndWordWrapProvider.childContextTypes = {
-	    textResizeAndWordWrapProviderAddTextItem: _react2.default.PropTypes.func,
-	    textResizeAndWordWrapProviderRemoveTextItem: _react2.default.PropTypes.func,
-	    textResizeAndWordWrapProviderUpdateTextItem: _react2.default.PropTypes.func,
-	    textResizeAndWordWrapProviderUpdateGroupTextItem: _react2.default.PropTypes.func
-	};
-
-	TextResizeAndWordWrapProvider.contextTypes = {
+	TextResizeAndWordWrapProvider.childContextTypes = TextResizeAndWordWrapProvider.contextTypes = {
 	    textResizeAndWordWrapProviderAddTextItem: _react2.default.PropTypes.func,
 	    textResizeAndWordWrapProviderRemoveTextItem: _react2.default.PropTypes.func,
 	    textResizeAndWordWrapProviderUpdateTextItem: _react2.default.PropTypes.func,
@@ -30092,8 +30102,7 @@
 	                    'svg',
 	                    {
 	                        width: '500px',
-	                        height: '360px',
-	                        overflow: 'visible'
+	                        height: '360px'
 	                    },
 	                    _react2.default.createElement('rect', {
 	                        x: '0px',
