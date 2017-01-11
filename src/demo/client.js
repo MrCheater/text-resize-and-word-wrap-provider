@@ -14,3 +14,14 @@ ReactDOM.render((
         <DemoTwoChartBarOneContext/>
     </div>
 ), document.getElementById('app'));
+
+// ReactDOM.render((
+//     <div>
+//         <h1>Demo Align, Scale, Colors, Debug Mode, Multi Text</h1>
+//         <DemoAlignScaleColorDebug/>
+//         <h1>Demo Bar Chart</h1>
+//         <DemoChartBar/>
+//         <h1>Demo Two Bar Chart - One Context</h1>
+//         <DemoTwoChartBarOneContext/>
+//     </div>
+// ), document.getElementById('app'));

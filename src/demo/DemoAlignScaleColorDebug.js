@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, textResizeAndWordWrap } from '../index';
+import { randomContent } from './randomContent';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
@@ -9,7 +10,7 @@ const LOREM_IPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
 export class DemoAlignScaleColorDebug extends React.Component {
     state = {
         scale : 0.75,
-        colors : ["#F2671F", "#C91B26", "#9C0F5F", "#60047A", "#160A47", "#D93240", "#638CA6", "#BF22D9", "#0F5959"],
+        colors : randomContent.colors,
         colorsOn : true,
         longTextOn : false,
         debugModeOn : true,
@@ -18,52 +19,52 @@ export class DemoAlignScaleColorDebug extends React.Component {
         weightBottomText : 1
     };
 
-    updateScale = (scale) => {
-        this.setState({
-            scale
-        });
-    };
+    updateScale = (scale) => this.setState({
+        scale
+    });
 
-    toggleColors = () => {
-        this.setState({
-            colorsOn : !this.state.colorsOn
-        });
-    };
+    toggleColors = () => this.setState({
+        colorsOn : !this.state.colorsOn
+    });
 
-    toggleLongText = () => {
-        this.setState({
-            longTextOn : !this.state.longTextOn
-        });
-    };
+    toggleLongText = () => this.setState({
+        longTextOn : !this.state.longTextOn
+    });
 
-    toggleDebugMode = () => {
-        this.setState({
-            debugModeOn : !this.state.debugModeOn
-        });
-    };
+    toggleDebugMode = () => this.setState({
+        debugModeOn : !this.state.debugModeOn
+    });
 
-    toggleMultiText = () => {
-        this.setState({
-            multiTextOn : !this.state.multiTextOn
-        });
-    };
+    toggleMultiText = () => this.setState({
+        multiTextOn : !this.state.multiTextOn
+    });
 
-    updateWeightTopText = (weightTopText) => {
-        this.setState({
-            weightTopText
-        });
-    };
+    updateWeightTopText = (weightTopText) => this.setState({
+        weightTopText
+    });
 
-    updateWeightBottomText = (weightBottomText) => {
-        this.setState({
-            weightBottomText
-        });
-    };
+    updateWeightBottomText = (weightBottomText) => this.setState({
+        weightBottomText
+    });
 
     getTextValue = (value) => {
         return this.state.multiTextOn ? [
-            {text: value, weight: this.state.weightTopText, color: 'black'},
-            {text: LOREM_IPSUM, weight: this.state.weightBottomText}
+            (
+                <tdiv
+                    weight = {this.state.weightTopText}
+                    color = 'black'
+                    key = {0}
+                >
+                    {value}
+                </tdiv>
+            ), (
+                <tdiv
+                    weight = {this.state.weightBottomText}
+                    key = {1}
+                >
+                    {LOREM_IPSUM}
+                </tdiv>
+            )
         ] : (value + (this.state.longTextOn ? (' ' + LOREM_IPSUM) : ''));
     };
 
@@ -76,130 +77,136 @@ export class DemoAlignScaleColorDebug extends React.Component {
                     overflow = 'visible'
                 >
                     <rect
-                        x = '0px'
-                        y = '0px'
                         width = '500px'
                         height = '360px'
-                        fill = 'grey'
-                        opacity = {0.25}
+                        fill = '#DDDDDD'
                     />
                     <Text
                         x = {0}
                         y = {0}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Left Top')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'left'}
                         verticalAlign = {'top'}
                         color = {this.state.colorsOn ? this.state.colors[0] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Left Top')}
+                    </Text>
                     <Text
                         x = {185}
                         y = {0}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Center Top')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'center'}
                         verticalAlign = {'top'}
                         color = {this.state.colorsOn ? this.state.colors[1] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Center Top')}
+                    </Text>
                     <Text
                         x = {370}
                         y = {0}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Right Top')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'right'}
                         verticalAlign = {'top'}
                         color = {this.state.colorsOn ? this.state.colors[2] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Right Top')}
+                    </Text>
                     <Text
                         x = {0}
                         y = {125}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Left Middle')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'left'}
                         verticalAlign = {'middle'}
                         color = {this.state.colorsOn ? this.state.colors[3] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Left Middle')}
+                    </Text>
                     <Text
                         x = {185}
                         y = {125}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Center Middle')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'center'}
                         verticalAlign = {'middle'}
                         color = {this.state.colorsOn ? this.state.colors[4] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Center Middle')}
+                    </Text>
                     <Text
                         x = {370}
                         y = {125}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Right Middle')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'right'}
                         verticalAlign = {'middle'}
                         color = {this.state.colorsOn ? this.state.colors[5] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Right Middle')}
+                    </Text>
                     <Text
                         x = {0}
                         y = {250}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Left Bottom')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'left'}
                         verticalAlign = {'bottom'}
                         color = {this.state.colorsOn ? this.state.colors[6] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Left Bottom')}
+                    </Text>
                     <Text
                         x = {185}
                         y = {250}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Center Bottom')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'center'}
                         verticalAlign = {'bottom'}
                         color = {this.state.colorsOn ? this.state.colors[7] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Center Bottom')}
+                    </Text>
                     <Text
                         x = {370}
                         y = {250}
                         width = {130}
                         height = {110}
-                        value = {this.getTextValue('Right Bottom')}
                         group = '1'
                         scale = {this.state.scale}
                         textAlign = {'right'}
                         verticalAlign = {'bottom'}
                         color = {this.state.colorsOn ? this.state.colors[8] : undefined}
                         debugMode = {this.state.debugModeOn}
-                    />
+                    >
+                        {this.getTextValue('Right Bottom')}
+                    </Text>
                 </svg>
                 <div style = {{width : '500px'}}>
                     <div>

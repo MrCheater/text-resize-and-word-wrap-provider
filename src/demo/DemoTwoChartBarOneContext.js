@@ -11,10 +11,14 @@ export class DemoTwoChartBarOneContext extends React.Component {
                     <tr>
                         <td>
                             1)
+                        </td>
+                        <td>
                             <DemoChartBar/>
                         </td>
                         <td>
                             2)
+                        </td>
+                        <td>
                             <DemoChartBar/>
                         </td>
                     </tr>

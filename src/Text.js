@@ -1,6 +1,8 @@
 import React from 'react';
 import { TextResizeAndWordWrapProvider } from './TextResizeAndWordWrapProvider';
-import { Component } from './Component';
+import { Component } from './helpers/Component';
+import { parser } from './helpers/parser';
+import { contextTypes } from './helpers/contextTypes';
 
 export class Text extends Component {
     constructor(props, context) {
@@ -16,7 +18,6 @@ export class Text extends Component {
             this.context.textResizeAndWordWrapProviderUpdateGroupTextItem;
     };
 
-
     componentWillReceiveProps(nextProps) {
         if(this.props.group !== nextProps.group) {
             this.context.textResizeAndWordWrapProviderUpdateGroupTextItem(this, this.props.group, nextProps.group);
@@ -30,9 +31,7 @@ export class Text extends Component {
         }
         this.textItem = {
             ...props,
-            value : Array.isArray(props.value) ? props.value.map(
-                    ({ text, weight, color }) => ({ words : text.trim().split(' '), weight, color })
-                ) : [{words : ('' + props.value).trim().split(' '), weight : 1}],
+            value : parser(props.children),
             group : props.group || this.randomGroupId,
             width : props.width * props.scale,
             height : props.height * props.scale,
@@ -55,7 +54,7 @@ export class Text extends Component {
             const countWords = words.length;
             for(let wordIndex = countWords; wordIndex--;) {
                 const key = `word-${innerTextIndex}-${wordIndex}`;
-                this.wordWidths[key] = this.refs[key].getBBox().width;
+                this.wordWidths[key] = this.refs[key].getComputedTextLength();
             }
         }
     };
@@ -83,27 +82,43 @@ export class Text extends Component {
         this.context.textResizeAndWordWrapProviderRemoveTextItem(this);
     }
 
-    renderWords =  ({words}, innerTextIndex) => (
-        <g
-            key = {innerTextIndex}
-            ref = {`words-${innerTextIndex}`}
-        >
-            {words.map(
-                (word, wordIndex) => (
-                    <text
-                        key = {`word-${wordIndex}`}
-                        ref = {`word-${innerTextIndex}-${wordIndex}`}
-                        x = '0px'
-                        y = '0px'
-                        dx = '0px'
-                        dy = '0px'
+    renderWords =  ({words, props}, innerTextIndex) => {
+        const wordsAndSpaces = [];
+        const countWords = words.length;
+        for(let wordIndex = 0; wordIndex < countWords; wordIndex++) {
+            wordsAndSpaces.push(
+                <tspan
+                    key = {`word-${wordIndex}`}
+                    ref = {`word-${innerTextIndex}-${wordIndex}`}
+                    x = '0px'
+                    y = '0px'
+                    dx = '0px'
+                    dy = '0px'
+                    fill = {props[wordIndex].color}
+                >
+                    {words[wordIndex]}
+                </tspan>
+            );
+            if(countWords - wordIndex - 1) {
+                wordsAndSpaces.push(
+                    <tspan
+                        key = {`space-${wordIndex}`}
+                        ref = {`space-${innerTextIndex}-${wordIndex}`}
                     >
-                        {word}
-                    </text>
-                )
-            )}
-        </g>
-    );
+                        {'\u00A0'}
+                    </tspan>
+                );
+            }
+        }
+        return (
+            <text
+                key = {innerTextIndex}
+                ref = {`words-${innerTextIndex}`}
+            >
+                {wordsAndSpaces}
+            </text>
+        );
+    };
 
     render() {
         if(!this.isContextReady()) {
@@ -115,7 +130,7 @@ export class Text extends Component {
         }
         const { x, y, width, height, debugMode } = this.props;
         return (
-            <g>
+            <g fill = {this.props.color}>
                 {debugMode ? (
                     <g>
                         <rect
@@ -180,9 +195,4 @@ Text.defaultProps = {
     value : ''
 };
 
-Text.contextTypes = {
-    textResizeAndWordWrapProviderAddTextItem         : React.PropTypes.func,
-    textResizeAndWordWrapProviderRemoveTextItem      : React.PropTypes.func,
-    textResizeAndWordWrapProviderUpdateTextItem      : React.PropTypes.func,
-    textResizeAndWordWrapProviderUpdateGroupTextItem : React.PropTypes.func,
-};
+Text.contextTypes = contextTypes;

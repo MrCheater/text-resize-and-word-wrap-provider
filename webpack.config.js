@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['./src/demo/client.js'],
+    entry: './src/demo/client.js',
     output: {
         path: './docs',
         filename: 'client.js',
@@ -25,6 +25,23 @@ module.exports = {
     resolve: {
         extensions: ['','.js'],
     },
+    plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"production"'
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            beautify: false,
+            comments: false,
+            minimize: true,
+            mangle: true,
+            compress: {
+                warnings: false,
+                drop_console: true
+            }
+        })
+    ],
     watch : true
 };
 
