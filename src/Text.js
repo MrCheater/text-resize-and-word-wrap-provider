@@ -86,6 +86,12 @@ export class Text extends Component {
         const wordsAndSpaces = [];
         const countWords = words.length;
         for(let wordIndex = 0; wordIndex < countWords; wordIndex++) {
+            const { color, overline, underline, lineThrough, bold, italic, fontStyle : _fontStyle, fontWeight : _fontWeight, isSpanEnd } = props[wordIndex];
+            const textDecoration = (overline || underline || lineThrough) ? (
+                `${overline ? 'overline ' : ''} ${underline ? 'underline ' : ''} ${lineThrough ? 'line-through ' : ''}`
+            ) : 'none';
+            const fontWeight = _fontWeight || (bold ? 'bold' : undefined);
+            const fontStyle = _fontStyle || (italic ? 'italic' : undefined);
             wordsAndSpaces.push(
                 <tspan
                     key = {`word-${wordIndex}`}
@@ -94,16 +100,21 @@ export class Text extends Component {
                     y = '0px'
                     dx = '0px'
                     dy = '0px'
-                    fill = {props[wordIndex].color}
+                    fill = {color}
+                    textDecoration = {textDecoration}
+                    fontWeight = {fontWeight}
+                    fontStyle = {fontStyle}
                 >
                     {words[wordIndex]}
                 </tspan>
             );
+            //console.log(countWords - wordIndex - 1, isSpanEnd);
             if(countWords - wordIndex - 1) {
                 wordsAndSpaces.push(
                     <tspan
                         key = {`space-${wordIndex}`}
                         ref = {`space-${innerTextIndex}-${wordIndex}`}
+                        textDecoration = {isSpanEnd ? 'inerit' : textDecoration}
                     >
                         {'\u00A0'}
                     </tspan>
@@ -169,17 +180,6 @@ Text.propTypes = {
     y : React.PropTypes.number.isRequired,
     width : React.PropTypes.number.isRequired,
     height : React.PropTypes.number.isRequired,
-    value : React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.number,
-        React.PropTypes.arrayOf(
-            React.PropTypes.shape({
-                weight : React.PropTypes.number.isRequired,
-                text : React.PropTypes.string.isRequired,
-                color : React.PropTypes.string
-            })
-        )
-    ]).isRequired,
     textAlign : React.PropTypes.oneOf(['left', 'right', 'center']),
     verticalAlign : React.PropTypes.oneOf(['top', 'bottom', 'middle']),
     color : React.PropTypes.string,
@@ -192,7 +192,8 @@ Text.defaultProps = {
     textAlign : 'center',
     verticalAlign : 'middle',
     scale : 1,
-    value : ''
+    x : 0,
+    y : 0
 };
 
 Text.contextTypes = contextTypes;

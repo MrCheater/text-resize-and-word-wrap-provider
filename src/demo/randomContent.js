@@ -9,7 +9,7 @@ export const randomContent = {
         '#f43a37',
         '#8b5413',
         '#3a9a24',
-        '#20b8c6'
+        '#167681'
     ],
     texts : [
         'lorem ipsum',
@@ -23,5 +23,6 @@ export const randomContent = {
         'et dolore',
         'magna',
         'aliqua'
-    ]
+    ],
+    longText : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
 };

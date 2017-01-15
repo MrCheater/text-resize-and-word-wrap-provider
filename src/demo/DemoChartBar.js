@@ -23,7 +23,7 @@ export class DemoChartBar extends React.Component {
             randomColors.sort(randomSort);
         }
         for(let barIndex = countBars; barIndex--;) {
-            const value = ~~(Math.random() * this.props.maxValue + this.props.minValue);
+            const value = (Math.random() * this.props.maxValue + this.props.minValue)|0;
             const barHeight = value * (this.props.height - this.props.textValueHeight - this.props.textSeriesHeight - this.props.textSeriesPadding) / 100 ;
             const barY = this.props.height - barHeight - this.props.textSeriesHeight - this.props.textSeriesPadding;
             bars[barIndex] = {
@@ -60,7 +60,7 @@ export class DemoChartBar extends React.Component {
                     <rect
                         width = {`${this.props.width}px`}
                         height = {`${this.props.height}px`}
-                        fill = {this.props.fill}
+                        fill = {this.props.backgroundColor}
                     />
                     {this.state.bars.map(
                         (bar, index) => (
@@ -114,7 +114,7 @@ export class DemoChartBar extends React.Component {
 }
 
 DemoChartBar.defaultProps = {
-    width: 500,
+    width: 480,
     height: 360,
     textScale : 0.9,
     textSeriesHeight: 25,
@@ -125,5 +125,5 @@ DemoChartBar.defaultProps = {
     minValue: 10,
     maxValue: 90,
     barScale : 0.5,
-    fill: '#DDDDDD',
+    backgroundColor: '#DDDDDD',
 };

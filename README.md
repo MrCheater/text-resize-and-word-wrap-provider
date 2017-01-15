@@ -12,19 +12,23 @@ Text.Example "Simple"
 <Text
     x = {185} y = {0}
     width = {130} height = {110}
-    value = 'Hello world'
-/>
+>
+    Hello world
+</Text>
 ```
 Text.Example "Multi Text"
 ```javascript
 <Text
     x = {185} y = {0}
     width = {130} height = {110}
-    value = {[
-        {text: 'Title', weight: 2},
-        {text: 'Hello world', weight: 1}
-    ]}
-/>
+>
+    <tdiv weight = {2}>
+        Title
+    </tdiv>
+    <tdiv weight = {1}>
+        Hello world
+    </tdiv>
+</Text>
 ```
 
 Text.PropTypes
@@ -34,17 +38,6 @@ Text.propTypes = {
     y : React.PropTypes.number.isRequired,
     width : React.PropTypes.number.isRequired,
     height : React.PropTypes.number.isRequired,
-    value : React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.number,
-        React.PropTypes.arrayOf(
-            React.PropTypes.shape({
-                weight : React.PropTypes.number.isRequired,
-                text : React.PropTypes.string.isRequired,
-                color : React.PropTypes.string
-            })
-        )
-    ]).isRequired,
     textAlign : React.PropTypes.oneOf(['left', 'right', 'center']),
     verticalAlign : React.PropTypes.oneOf(['top', 'bottom', 'middle']),
     color : React.PropTypes.string,

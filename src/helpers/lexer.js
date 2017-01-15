@@ -13,9 +13,10 @@ export function lexer(jsxText, props, results, init) {
     for(let childIndex = 0; childIndex < countChildren; childIndex++) {
         const child = jsxText[childIndex];
         if(React.isValidElement(child)) {
-            console.log(child);
             const type = child.type || child.nodeName;
-            if(type === 'tdiv') {
+            const isDiv = type === 'div';
+            const isBreakLine = type === 'br';
+            if(isDiv || isBreakLine) {
                 index++;
             }
             let {
@@ -23,6 +24,9 @@ export function lexer(jsxText, props, results, init) {
                 ...childProps
             } = child.props;
             children = children || child.children;
+            if(isBreakLine) {
+                children = ' ';
+            }
             if(children) {
                 lexer(
                     children,
@@ -34,7 +38,7 @@ export function lexer(jsxText, props, results, init) {
                     results
                 );
             }
-            if(type === 'tdiv') {
+            if(isDiv || isBreakLine) {
                 index++;
             }
         } else {
@@ -44,7 +48,10 @@ export function lexer(jsxText, props, results, init) {
             for(let wordIndex = 0; wordIndex < countWords; wordIndex++) {
                 results.push({
                     word : words[wordIndex],
-                    props,
+                    props : (countWords - wordIndex - 1) ? props : {
+                        ...props,
+                        isSpanEnd : true
+                    },
                     index
                 });
             }

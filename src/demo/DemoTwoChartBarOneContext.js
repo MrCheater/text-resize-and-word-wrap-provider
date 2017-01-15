@@ -6,24 +6,20 @@ import { textResizeAndWordWrap } from '../index';
 export class DemoTwoChartBarOneContext extends React.Component {
     render() {
         return (
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            1)
-                        </td>
-                        <td>
-                            <DemoChartBar/>
-                        </td>
-                        <td>
-                            2)
-                        </td>
-                        <td>
-                            <DemoChartBar/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <div style = {{display:'inline-block', verticalAlign:'top'}}>
+                    1)
+                </div>
+                <div style = {{display:'inline-block', verticalAlign:'top'}}>
+                    <DemoChartBar/>
+                </div>
+                <div style = {{display:'inline-block', verticalAlign:'top'}}>
+                    2)
+                </div>
+                <div style = {{display:'inline-block', verticalAlign:'top'}}>
+                    <DemoChartBar/>
+                </div>
+            </div>
         );
     }
 }

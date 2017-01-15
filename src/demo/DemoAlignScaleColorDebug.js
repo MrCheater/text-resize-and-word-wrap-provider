@@ -4,7 +4,13 @@ import { randomContent } from './randomContent';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
-const LOREM_IPSUM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+const textAlign = ['left', 'center', 'right'];
+const verticalAlign = ['top', 'middle', 'bottom'];
+const value = [
+    'Left Top',    'Center Top',    'Right Top',
+    'Left Middle', 'Center Middle', 'Right Middle',
+    'Left Bottom', 'Center Bottom', 'Right Bottom',
+];
 
 @textResizeAndWordWrap
 export class DemoAlignScaleColorDebug extends React.Component {
@@ -47,181 +53,78 @@ export class DemoAlignScaleColorDebug extends React.Component {
         weightBottomText
     });
 
-    getTextValue = (value) => {
-        return this.state.multiTextOn ? [
-            (
-                <tdiv
-                    weight = {this.state.weightTopText}
-                    color = 'black'
-                    key = {0}
-                >
-                    {value}
-                </tdiv>
-            ), (
-                <tdiv
-                    weight = {this.state.weightBottomText}
-                    key = {1}
-                >
-                    {LOREM_IPSUM}
-                </tdiv>
-            )
-        ] : (value + (this.state.longTextOn ? (' ' + LOREM_IPSUM) : ''));
-    };
-
     render() {
+        const paddingWidth = this.props.width * this.props.paddingScale;
+        const paddingHeight = this.props.height * this.props.paddingScale;
+        const itemWidth = (this.props.width - paddingWidth * 2) / 3;
+        const itemHeight = (this.props.height - paddingHeight * 2) / 3;
+        const children = [];
+        for(let iy = 0; iy < 3; iy++) {
+            for(let ix = 0; ix < 3; ix++) {
+                const index = iy * 3 + ix;
+                children.push(
+                    <Text
+                        key = {index}
+                        x = {ix * (itemWidth + paddingWidth)}
+                        y = {iy * (itemHeight + paddingHeight)}
+                        width = {itemWidth}
+                        height = {itemHeight}
+                        group = 'text'
+                        scale = {this.state.scale}
+                        textAlign = {textAlign[ix]}
+                        verticalAlign = {verticalAlign[iy]}
+                        color = {this.state.colorsOn ? this.state.colors[index] : undefined}
+                        debugMode = {this.state.debugModeOn}
+                    >
+                        {this.state.multiTextOn ? ([
+                            <div
+                                key = {0}
+                                weight = {this.state.weightTopText}
+                                color = 'black'
+                            >
+                                {value[index]}
+                            </div>,
+                            <div
+                                key = {1}
+                                weight = {this.state.weightBottomText}
+                            >
+                                {randomContent.longText}
+                            </div>
+                        ]) : (
+                            value[index] + (this.state.longTextOn ? (' ' + randomContent.longText) : '')
+                        )}
+                    </Text>
+                );
+            }
+        }
+
         return (
             <div>
                 <svg
-                    width = '500px'
-                    height = '360px'
-                    overflow = 'visible'
+                    width = {`${this.props.width}px`}
+                    height = {`${this.props.height}px`}
                 >
                     <rect
-                        width = '500px'
-                        height = '360px'
-                        fill = '#DDDDDD'
+                        width = {`${this.props.width}px`}
+                        height = {`${this.props.height}px`}
+                        fill = {this.props.backgroundColor}
                     />
-                    <Text
-                        x = {0}
-                        y = {0}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'left'}
-                        verticalAlign = {'top'}
-                        color = {this.state.colorsOn ? this.state.colors[0] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Left Top')}
-                    </Text>
-                    <Text
-                        x = {185}
-                        y = {0}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'center'}
-                        verticalAlign = {'top'}
-                        color = {this.state.colorsOn ? this.state.colors[1] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Center Top')}
-                    </Text>
-                    <Text
-                        x = {370}
-                        y = {0}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'right'}
-                        verticalAlign = {'top'}
-                        color = {this.state.colorsOn ? this.state.colors[2] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Right Top')}
-                    </Text>
-                    <Text
-                        x = {0}
-                        y = {125}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'left'}
-                        verticalAlign = {'middle'}
-                        color = {this.state.colorsOn ? this.state.colors[3] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Left Middle')}
-                    </Text>
-                    <Text
-                        x = {185}
-                        y = {125}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'center'}
-                        verticalAlign = {'middle'}
-                        color = {this.state.colorsOn ? this.state.colors[4] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Center Middle')}
-                    </Text>
-                    <Text
-                        x = {370}
-                        y = {125}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'right'}
-                        verticalAlign = {'middle'}
-                        color = {this.state.colorsOn ? this.state.colors[5] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Right Middle')}
-                    </Text>
-                    <Text
-                        x = {0}
-                        y = {250}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'left'}
-                        verticalAlign = {'bottom'}
-                        color = {this.state.colorsOn ? this.state.colors[6] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Left Bottom')}
-                    </Text>
-                    <Text
-                        x = {185}
-                        y = {250}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'center'}
-                        verticalAlign = {'bottom'}
-                        color = {this.state.colorsOn ? this.state.colors[7] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Center Bottom')}
-                    </Text>
-                    <Text
-                        x = {370}
-                        y = {250}
-                        width = {130}
-                        height = {110}
-                        group = '1'
-                        scale = {this.state.scale}
-                        textAlign = {'right'}
-                        verticalAlign = {'bottom'}
-                        color = {this.state.colorsOn ? this.state.colors[8] : undefined}
-                        debugMode = {this.state.debugModeOn}
-                    >
-                        {this.getTextValue('Right Bottom')}
-                    </Text>
+                    {children}
                 </svg>
-                <div style = {{width : '500px'}}>
+                <div style = {{width : `${this.props.width}px`}}>
                     <div>
                         <div>
                             Scale = {this.state.scale}
                         </div>
                         <Slider
-                            min = {0.5}
-                            max = {1}
-                            step = {0.001}
+                            min = {this.props.minScale}
+                            max = {this.props.maxScale}
+                            step = {this.props.stepScale}
                             value = {this.state.scale}
                             onChange = {this.updateScale}
                         />
                     </div>
-                    <table style = {{width : '500px'}}>
+                    <table style = {{width : `${this.props.width}px`}}>
                         <tbody>
                             <tr>
                                 <td onClick = {this.toggleColors}>
@@ -265,9 +168,9 @@ export class DemoAlignScaleColorDebug extends React.Component {
                             <div>
                                 Weight Top Text = {this.state.weightTopText}
                                 <Slider
-                                    min = {1}
-                                    max = {3}
-                                    step = {0.1}
+                                    min = {this.props.minTextWeight}
+                                    max = {this.props.maxTextWeight}
+                                    step = {this.props.stepTextWeight}
                                     value = {this.state.weightTopText}
                                     onChange = {this.updateWeightTopText}
                                 />
@@ -275,9 +178,9 @@ export class DemoAlignScaleColorDebug extends React.Component {
                             <div>
                                 Weight Bottom Text = {this.state.weightBottomText}
                                 <Slider
-                                    min = {1}
-                                    max = {3}
-                                    step = {0.1}
+                                    min = {this.props.minTextWeight}
+                                    max = {this.props.maxTextWeight}
+                                    step = {this.props.stepTextWeight}
                                     value = {this.state.weightBottomText}
                                     onChange = {this.updateWeightBottomText}
                                 />
@@ -289,3 +192,16 @@ export class DemoAlignScaleColorDebug extends React.Component {
         );
     }
 }
+
+DemoAlignScaleColorDebug.defaultProps = {
+    width: 480,
+    height: 480,
+    paddingScale: 0.1,
+    backgroundColor: '#DDDDDD',
+    minTextWeight: 1,
+    maxTextWeight: 3,
+    stepTextWeight: 0.1,
+    minScale: 0.5,
+    maxScale: 1,
+    stepScale: 0.001
+};
