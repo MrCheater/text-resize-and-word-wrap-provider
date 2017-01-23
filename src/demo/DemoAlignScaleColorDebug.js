@@ -203,5 +203,5 @@ DemoAlignScaleColorDebug.defaultProps = {
     stepTextWeight: 0.1,
     minScale: 0.5,
     maxScale: 1,
-    stepScale: 0.001
+    stepScale: 0.05
 };

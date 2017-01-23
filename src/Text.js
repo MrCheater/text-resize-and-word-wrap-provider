@@ -114,7 +114,7 @@ export class Text extends Component {
                     <tspan
                         key = {`space-${wordIndex}`}
                         ref = {`space-${innerTextIndex}-${wordIndex}`}
-                        textDecoration = {isSpanEnd ? 'inerit' : textDecoration}
+                        textDecoration = {isSpanEnd ? 'inherit' : textDecoration}
                     >
                         {'\u00A0'}
                     </tspan>

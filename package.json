@@ -21,6 +21,7 @@
     "express": "^4.14.0",
     "preact": "^7.1.0",
     "preact-compat": "^3.9.4",
+    "raw-loader": "^0.5.1",
     "rc-slider": "^5.4.0",
     "react-lite": "^0.15.29",
     "style-loader": "^0.13.1",
