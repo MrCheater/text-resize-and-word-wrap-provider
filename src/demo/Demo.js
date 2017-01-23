@@ -38,7 +38,8 @@ const containerStyle = {
 
 const codeStyle = {
     maxHeight: '480px',
-    overflow: 'auto'
+    overflow: 'auto',
+    display: 'block'
 };
 
 const tagsToReplace = {
@@ -65,12 +66,6 @@ export class Demo extends React.Component {
         mode : mode.code
     });
 
-    componentDidUpdate() {
-        if(this.refs.code) {
-            hljs.highlightBlock(this.refs.code);
-        }
-    }
-
     render() {
         const DemoComponent = this.props.result;
         return (
@@ -95,13 +90,9 @@ export class Demo extends React.Component {
                         <pre>
                             <code
                                 style = {codeStyle}
-                                ref = 'code'
-                                className = 'javascript xml'
                                 dangerouslySetInnerHTML={{__html:
-                                   escapeTags(this.props.code)
-                                       .replace(/(?:\r\n|\r|\n)/g, '<br/>')
-                                       //.replace(/ /g, '&nbsp;')
-                               }}
+                                    escapeTags(this.props.code)
+                                }}
                             />
                         </pre>
                     ) : (

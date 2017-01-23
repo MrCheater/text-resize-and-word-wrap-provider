@@ -51,7 +51,9 @@ export class TextResizeAndWordWrapProvider extends Component {
 
     addTextItemToGroup(textItem, groupId) {
         if(this.groups[groupId]) {
-            this.groups[groupId].push(textItem);
+            const group = this.groups[groupId];
+            group.push(textItem);
+            group.needUpdate = true;
         } else {
             const group = [textItem];
             group.needUpdate = true;
@@ -60,10 +62,12 @@ export class TextResizeAndWordWrapProvider extends Component {
     }
 
     removeTextItemFromGroup(textItem, groupId) {
-        this.groups[groupId] = this.groups[groupId].filter(
+        const filteredGroup = this.groups[groupId].filter(
             (currentTextItem) => currentTextItem !== textItem
         );
-        if(this.groups[groupId].length === 0) {
+        this.groups[groupId] = filteredGroup;
+        filteredGroup.needUpdate = true;
+        if(filteredGroup.length === 0) {
             delete this.groups[groupId];
         }
     }
@@ -71,20 +75,17 @@ export class TextResizeAndWordWrapProvider extends Component {
     addTextItem = (instance) => {
         const groupId = instance.textItem.group;
         this.addTextItemToGroup(instance, groupId);
-        this.optionalForceUpdate();
+        this.optionalForceUpdate(groupId);
     };
 
     removeTextItem = (instance) => {
         const groupId = instance.textItem.group;
         this.removeTextItemFromGroup(instance, groupId);
-        this.optionalForceUpdate();
+        this.optionalForceUpdate(groupId);
     };
 
     optionalForceUpdate = (groupId) => {
-        const group = this.groups[groupId];
-        if(group) {
-            group.needUpdate = true;
-        }
+        this.groups[groupId].needUpdate = true;
         if(!this.needUpdate) {
             this.needUpdate = true;
             this.forceUpdate();

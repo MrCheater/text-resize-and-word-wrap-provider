@@ -1,6 +1,6 @@
 {
   "name": "text-resize-and-word-wrap-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,6 +8,9 @@
     "build:preact": "export TARGET=preact && webpack",
     "build:react-lite": "export TARGET=react-lite && webpack",
     "build:source": "babel src --out-dir dist",
+    "dev": "node scripts/dev.js",
+    "prod": "node scripts/prod.js",
+    "prod-and-start": "node scripts/prod.js && npm run start",
     "start": "node src/demo/server.js"
   },
   "devDependencies": {

@@ -94,6 +94,8 @@ export class Text extends Component {
             const fontStyle = _fontStyle || (italic ? 'italic' : undefined);
             wordsAndSpaces.push(
                 <tspan
+                    x = '0px'
+                    y = '0px'
                     key = {`word-${wordIndex}`}
                     ref = {`word-${innerTextIndex}-${wordIndex}`}
                     fill = {color}

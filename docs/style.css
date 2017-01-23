@@ -1,0 +1,12 @@
+body {
+    font-family: sans-serif;
+}
+h1 {
+    margin-bottom: 5px;
+}
+td {
+    vertical-align: top;
+}
+pre {
+    margin: 0;
+}

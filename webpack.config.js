@@ -4,8 +4,6 @@ module.exports = {
     entry: './src/demo/client.js',
     output: {
         path: './docs',
-        filename: 'client.js',
-        publicPath: '/client.js',
         devtoolModuleFilenameTemplate: '[resource-path]',
         devtoolFallbackModuleFilenameTemplate: '[resource-path]?[hash]'
     },
@@ -25,7 +23,7 @@ module.exports = {
     resolve: {
         extensions: ['','.js'],
     },
-    plugins: [
+    plugins: (process.env.NODE_ENV === 'production') ? [
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.DedupePlugin(),
         new webpack.DefinePlugin({
@@ -41,8 +39,8 @@ module.exports = {
                 drop_console: true
             }
         })
-    ],
-    watch : true
+    ] : [],
+    watch : (process.env.NODE_ENV === 'production') ? false :true
 };
 
 if(process.env.TARGET === 'preact') {
@@ -50,9 +48,16 @@ if(process.env.TARGET === 'preact') {
         'react': 'preact-compat',
         'react-dom': 'preact-compat'
     };
+    module.exports.output.filename = 'preact-demo.js';
+    module.exports.output.publicPath = '/preact-demo.js';
 } else if(process.env.TARGET === 'react-lite') {
     module.exports.resolve.alias = {
         'react': 'react-lite',
         'react-dom': 'react-lite'
     };
+    module.exports.output.filename = 'react-lite-demo.js';
+    module.exports.output.publicPath = '/react-lite-demo.js';
+} else {
+    module.exports.output.filename = 'react-demo.js';
+    module.exports.output.publicPath = '/react-demo.js';
 }
