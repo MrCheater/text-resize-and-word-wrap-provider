@@ -17,7 +17,10 @@ export class TextResizeAndWordWrapProvider extends Component {
         const groups = this.groups;
         for(let groupId in groups) {
             const group = groups[groupId];
-            setFontSizeAndWordWrap(group, calculateFontSize(group))
+            if(group.needUpdate) {
+                setFontSizeAndWordWrap(group, calculateFontSize(group));
+                group.needUpdate = false;
+            }
         }
     };
 
@@ -50,7 +53,9 @@ export class TextResizeAndWordWrapProvider extends Component {
         if(this.groups[groupId]) {
             this.groups[groupId].push(textItem);
         } else {
-            this.groups[groupId] = [textItem]
+            const group = [textItem];
+            group.needUpdate = true;
+            this.groups[groupId] = group;
         }
     }
 
@@ -75,7 +80,11 @@ export class TextResizeAndWordWrapProvider extends Component {
         this.optionalForceUpdate();
     };
 
-    optionalForceUpdate = () => {
+    optionalForceUpdate = (groupId) => {
+        const group = this.groups[groupId];
+        if(group) {
+            group.needUpdate = true;
+        }
         if(!this.needUpdate) {
             this.needUpdate = true;
             this.forceUpdate();
@@ -87,8 +96,9 @@ export class TextResizeAndWordWrapProvider extends Component {
         this.addTextItemToGroup(instance, nextGroupId);
     };
 
-    updateTextItem = () => {
-        this.optionalForceUpdate();
+    updateTextItem = (instance) => {
+        const groupId = instance.textItem.group;
+        this.optionalForceUpdate(groupId);
     };
 }
 

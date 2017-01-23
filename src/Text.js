@@ -64,7 +64,7 @@ export class Text extends Component {
             return;
         }
         this.update();
-        this.context.textResizeAndWordWrapProviderUpdateTextItem();
+        this.context.textResizeAndWordWrapProviderUpdateTextItem(this);
     }
 
     componentDidMount() {
@@ -96,10 +96,6 @@ export class Text extends Component {
                 <tspan
                     key = {`word-${wordIndex}`}
                     ref = {`word-${innerTextIndex}-${wordIndex}`}
-                    x = '0px'
-                    y = '0px'
-                    dx = '0px'
-                    dy = '0px'
                     fill = {color}
                     textDecoration = {textDecoration}
                     fontWeight = {fontWeight}
@@ -108,7 +104,6 @@ export class Text extends Component {
                     {words[wordIndex]}
                 </tspan>
             );
-            //console.log(countWords - wordIndex - 1, isSpanEnd);
             if(countWords - wordIndex - 1) {
                 wordsAndSpaces.push(
                     <tspan

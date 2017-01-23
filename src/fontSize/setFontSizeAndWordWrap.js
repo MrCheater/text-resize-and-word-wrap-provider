@@ -15,6 +15,7 @@ export function setFontSizeAndWordWrap(group, fontSize) {
             const key = `words-${innerTextIndex}`;
             refs[key].setAttribute('font-size', displayFontSize + 'px');
             refs[key].setAttribute('fill', color ? color : 'inherit');
+            let breakLine = true;
             for(let wordIndex = 0; wordIndex < countWords; wordIndex++) {
                 const key = `word-${innerTextIndex}-${wordIndex}`;
                 const spaceKey = `space-${innerTextIndex}-${wordIndex-1}`;
@@ -31,17 +32,20 @@ export function setFontSizeAndWordWrap(group, fontSize) {
                     if(spaceElement) {
                         spaceElement.setAttribute('style', 'display: none;');
                     }
+                    breakLine = true;
                 } else if(spaceElement) {
                     spaceElement.setAttribute('style', '');
                 }
                 const element = refs[key];
                 const row = rows[rowIndex];
                 row.elements.push(element);
+                if(breakLine) {
+                    row.height = wordHeight;
+                    row.x = x + wordX;
+                    row.y = y + wordY - symbolDy * factor;
+                    breakLine = false;
+                }
                 row.width = wordBoundsRight;
-                row.height = wordHeight;
-                element.setAttribute('x', x + wordX + 'px');
-                //element.setAttribute('y', (y + wordY - symbolDy * factor)|0 + 'px');
-                element.setAttribute('y', y + wordY - symbolDy * factor + 'px');
                 wordX += wordWidth + spaceWidth * factor;
             }
             wordX = 0;
@@ -55,21 +59,25 @@ export function setFontSizeAndWordWrap(group, fontSize) {
         for(let rowIndex = countRows; rowIndex--;) {
             height += rows[rowIndex].height;
         }
+        const dy =
+            (verticalAlign === 'top') ? 0 :
+            (verticalAlign === 'middle') ? ((maxHeight - height) / 2) :
+            (verticalAlign === 'bottom') ? (maxHeight - height) : 0;
         for(let rowIndex = countRows; rowIndex--;) {
-            const { width, elements } = rows[rowIndex];
+            const { width, elements, x, y } = rows[rowIndex];
             const dx =
                 (textAlign === 'left') ? 0 :
-                    (textAlign === 'center') ? ((maxWidth - width) / 2) :
-                        (textAlign === 'right') ? (maxWidth - width) : 0;
-            const dy =
-                (verticalAlign === 'top') ? 0 :
-                    (verticalAlign === 'middle') ? ((maxHeight - height) / 2) :
-                        (verticalAlign === 'bottom') ? (maxHeight - height) : 0;
-            const countElements = elements.length;
-            for(let elementIndex = countElements; elementIndex--;) {
-                elements[elementIndex].setAttribute('dx', dx);
-                //elements[elementIndex].setAttribute('dy', (dy)|0);
-                elements[elementIndex].setAttribute('dy', dy);
+                (textAlign === 'center') ? ((maxWidth - width) / 2) :
+                (textAlign === 'right') ? (maxWidth - width) : 0;
+            for(let elementIndex = elements.length; elementIndex--;) {
+                const element = elements[elementIndex];
+                if(elementIndex) {
+                    element.removeAttribute('x');
+                    element.removeAttribute('y');
+                } else {
+                    element.setAttribute('x', `${x + dx}px`);
+                    element.setAttribute('y', `${y + dy}px`);
+                }
             }
         }
     }

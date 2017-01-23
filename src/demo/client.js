@@ -60,10 +60,10 @@ ReactDOM.render((
             result = {DemoRichText}
             code = {DemoRichTextCode}
         />
-        <h1>Demo onClick, onFocus, onBlur</h1>
-        <h1>Demo onMouseOut/onMouseOver</h1>
+        <h1>Demo onClick/onMouseOut/onMouseOver</h1>
         <h1>Demo Rotation</h1>
         <h1>Demo Mouse Cursor</h1>
         <h1>Demo Stroke</h1>
+        <h1>Demo Line-height/Word-spacing</h1>
     </div>
 ), document.getElementById('app'));
