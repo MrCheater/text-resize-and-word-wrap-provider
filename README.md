@@ -87,7 +87,7 @@ Text.propTypes = {
     color : String,
     scale : Number, //0...1
     group : oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    debugMode : Bool,
+    debugMode : Boolean,
     onClick : Function,
     onMouseOver : Function,
     onMouseOut : Function,
