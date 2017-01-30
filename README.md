@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MrCheater/text-resize-and-word-wrap-provider.svg?branch=master)](https://travis-ci.org/MrCheater/text-resize-and-word-wrap-provider)
+
 #See DEMO
 https://mrcheater.github.io/text-resize-and-word-wrap-provider/
 [![image](https://mrcheater.github.io/text-resize-and-word-wrap-provider/demo.png)](https://mrcheater.github.io/text-resize-and-word-wrap-provider/)
