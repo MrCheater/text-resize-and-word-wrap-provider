@@ -80,8 +80,8 @@ export class TextResizeAndWordWrapProvider extends Component {
 
     removeTextItem = (instance) => {
         const groupId = instance.textItem.group;
-        this.removeTextItemFromGroup(instance, groupId);
         this.optionalForceUpdate(groupId);
+        this.removeTextItemFromGroup(instance, groupId);
     };
 
     optionalForceUpdate = (groupId) => {

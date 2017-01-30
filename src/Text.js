@@ -3,6 +3,7 @@ import { TextResizeAndWordWrapProvider } from './TextResizeAndWordWrapProvider';
 import { Component } from './helpers/Component';
 import { parser } from './helpers/parser';
 import { contextTypes } from './helpers/contextTypes';
+import { makeLink } from './helpers/makeLink';
 
 export class Text extends Component {
     constructor(props, context) {
@@ -31,7 +32,7 @@ export class Text extends Component {
         }
         this.textItem = {
             ...props,
-            value : parser(props.children),
+            value : parser(props.children || ''),
             group : props.group || this.randomGroupId,
             width : props.width * props.scale,
             height : props.height * props.scale,
@@ -86,12 +87,36 @@ export class Text extends Component {
         const wordsAndSpaces = [];
         const countWords = words.length;
         for(let wordIndex = 0; wordIndex < countWords; wordIndex++) {
-            const { color, overline, underline, lineThrough, bold, italic, fontStyle : _fontStyle, fontWeight : _fontWeight, isSpanEnd } = props[wordIndex];
+            const {
+                color,
+                overline,
+                underline,
+                lineThrough,
+                bold,
+                italic,
+                fontStyle : _fontStyle,
+                fontWeight : _fontWeight,
+                isSpanEnd,
+                isTagA,
+                href,
+                target,
+                onClick,
+                onMouseOver,
+                onMouseOut,
+            } = props[wordIndex];
+
             const textDecoration = (overline || underline || lineThrough) ? (
                 `${overline ? 'overline ' : ''} ${underline ? 'underline ' : ''} ${lineThrough ? 'line-through ' : ''}`
             ) : 'none';
             const fontWeight = _fontWeight || (bold ? 'bold' : undefined);
             const fontStyle = _fontStyle || (italic ? 'italic' : undefined);
+
+            let word = words[wordIndex];
+            let space = '\u00A0';
+            if(isTagA) {
+                word = makeLink(word, href, target, color, textDecoration, fontWeight, fontStyle);
+                space = makeLink(space, href, target, color, textDecoration, fontWeight, fontStyle);
+            }
             wordsAndSpaces.push(
                 <tspan
                     x = '0px'
@@ -102,8 +127,11 @@ export class Text extends Component {
                     textDecoration = {textDecoration}
                     fontWeight = {fontWeight}
                     fontStyle = {fontStyle}
+                    onClick = {onClick}
+                    onMouseOver = {onMouseOver}
+                    onMouseOut = {onMouseOut}
                 >
-                    {words[wordIndex]}
+                    {word}
                 </tspan>
             );
             if(countWords - wordIndex - 1) {
@@ -113,7 +141,7 @@ export class Text extends Component {
                         ref = {`space-${innerTextIndex}-${wordIndex}`}
                         textDecoration = {isSpanEnd ? 'inherit' : textDecoration}
                     >
-                        {'\u00A0'}
+                        {space}
                     </tspan>
                 );
             }
@@ -136,9 +164,23 @@ export class Text extends Component {
                 </TextResizeAndWordWrapProvider>
             );
         }
-        const { x, y, width, height, debugMode } = this.props;
+        const {
+            x,
+            y,
+            width,
+            height,
+            debugMode,
+            onClick,
+            onMouseOver,
+            onMouseOut,
+        } = this.props;
         return (
-            <g fill = {this.props.color}>
+            <g
+                fill = {this.props.color}
+                onClick = {onClick}
+                onMouseOver = {onMouseOver}
+                onMouseOut = {onMouseOut}
+            >
                 {debugMode ? (
                     <g>
                         <rect

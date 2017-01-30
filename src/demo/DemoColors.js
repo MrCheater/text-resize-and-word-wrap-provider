@@ -33,9 +33,6 @@ export class DemoColors extends React.Component {
                         )
                     )}
                 </svg>
-
-
-
             </div>
         );
     }

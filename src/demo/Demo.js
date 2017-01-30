@@ -74,19 +74,19 @@ export class Demo extends React.Component {
                     {this.props.title}
                 </h1>
                 <div
-                    style = {this.state.mode === mode.result ? tabActiveStyle : tabStyle}
+                    style = {(this.state.mode === mode.result) ? tabActiveStyle : tabStyle}
                     onClick = {this.setModeResult}
                 >
                     Result
                 </div>
                 <div
-                    style = {this.state.mode === mode.code ? tabActiveStyle : tabStyle}
+                    style = {(this.state.mode === mode.code) ? tabActiveStyle : tabStyle}
                     onClick = {this.setModeCode}
                 >
                     Code
                 </div>
                 <div style = {tabBodyStyle}>
-                    {this.state.mode === mode.code ? (
+                    {(this.state.mode === mode.code) ? (
                         <pre>
                             <code
                                 style = {codeStyle}

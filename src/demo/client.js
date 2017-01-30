@@ -16,6 +16,10 @@ import { DemoRichText } from './DemoRichText';
 import DemoRichTextCode from '!raw-loader!./DemoRichText';
 import { DemoBubbles } from './DemoBubbles';
 import DemoBubblesCode from '!raw-loader!./DemoBubbles';
+import { DemoSupportTagA } from './DemoSupportTagA';
+import DemoSupportTagACode from '!raw-loader!./DemoSupportTagA';
+import { DemoMouseEvents } from './DemoMouseEvents';
+import DemoMouseEventsCode from '!raw-loader!./DemoMouseEvents';
 import { Demo } from './Demo';
 
 ReactDOM.render((
@@ -60,10 +64,20 @@ ReactDOM.render((
             result = {DemoRichText}
             code = {DemoRichTextCode}
         />
-        <h1>Demo onClick/onMouseOut/onMouseOver</h1>
+        <Demo
+            title = 'Demo Support Tag "A"'
+            result = {DemoSupportTagA}
+            code = {DemoSupportTagACode}
+        />
+        <Demo
+            title = 'Demo onClick/onMouseOut/onMouseOver'
+            result = {DemoMouseEvents}
+            code = {DemoMouseEventsCode}
+        />
         <h1>Demo Rotation</h1>
         <h1>Demo Mouse Cursor</h1>
         <h1>Demo Stroke</h1>
         <h1>Demo Line-height/Word-spacing</h1>
+        <h1>Demo Max Number Of Rows</h1>
     </div>
 ), document.getElementById('app'));

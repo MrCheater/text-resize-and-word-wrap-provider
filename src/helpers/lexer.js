@@ -16,6 +16,7 @@ export function lexer(jsxText, props, results, init) {
             const type = child.type || child.nodeName;
             const isDiv = type === 'div';
             const isBreakLine = type === 'br';
+            const isTagA = props.isTagA || (type === 'a');
             if(isDiv || isBreakLine) {
                 index++;
             }
@@ -33,6 +34,7 @@ export function lexer(jsxText, props, results, init) {
                     {
                         ...props,
                         ...childProps,
+                        isTagA,
                         type
                     },
                     results
@@ -48,9 +50,9 @@ export function lexer(jsxText, props, results, init) {
             for(let wordIndex = 0; wordIndex < countWords; wordIndex++) {
                 results.push({
                     word : words[wordIndex],
-                    props : (countWords - wordIndex - 1) ? props : {
+                    props : {
                         ...props,
-                        isSpanEnd : true
+                        isSpanEnd : !(countWords - wordIndex - 1)
                     },
                     index
                 });
