@@ -12,22 +12,6 @@ https://github.com/MrCheater/text-resize-and-word-wrap-provider/tree/master/src/
 npm install text-resize-and-word-wrap-provider
 ```
 
-# Browser support
-* IE 9
-* IE 10
-* IE 11
-* Edge
-* Firefox 3.5+ 
-* Chrome
-* Opera 12+
-* Safari 5.1.7+
-* Midori (font-size < 3px - no support)
-
-# Compiler targets
-* React
-* Preact
-* React-lite
-
 # Usage
 ```javascript
 import {
@@ -36,6 +20,22 @@ import {
     textResizeAndWordWrap
 } from 'text-resize-and-word-wrap-provider';
 ```
+
+# Browser support
+* Chrome
+* Safari 5.1.7+
+* Edge
+* IE 9
+* IE 10
+* IE 11
+* Firefox 3.5+ 
+* Opera 12+
+* Midori (font-size < 3px - no support)
+
+# Compiler targets
+* React
+* Preact
+* React-lite
 
 ## Text (Standalone)
 #### Simple Text
