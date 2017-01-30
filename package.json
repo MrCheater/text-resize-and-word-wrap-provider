@@ -1,6 +1,6 @@
 {
   "name": "text-resize-and-word-wrap-provider",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -31,6 +31,7 @@
     "webpack": "1.14.0"
   },
   "dependencies": {
+    "parse-absolute-css-unit": "^1.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
   },

@@ -4,6 +4,7 @@ import { Component } from './helpers/Component';
 import { parser } from './helpers/parser';
 import { contextTypes } from './helpers/contextTypes';
 import { makeLink } from './helpers/makeLink';
+import parseAbsoluteCSSUnit from 'parse-absolute-css-unit';
 
 export class Text extends Component {
     constructor(props, context) {
@@ -30,14 +31,19 @@ export class Text extends Component {
         if(!this.isContextReady()) {
             return;
         }
+        const x = parseAbsoluteCSSUnit(props.x);
+        const y = parseAbsoluteCSSUnit(props.y);
+        const width = parseAbsoluteCSSUnit(props.width);
+        const height = parseAbsoluteCSSUnit(props.height);
+        const halfInverseScale = (1 - props.scale) / 2;
         this.textItem = {
             ...props,
             value : parser(props.children || ''),
             group : props.group || this.randomGroupId,
-            width : props.width * props.scale,
-            height : props.height * props.scale,
-            x : props.x + props.width * (1 - props.scale) / 2,
-            y : props.y + props.height * (1 - props.scale) / 2,
+            width : width * props.scale,
+            height : height * props.scale,
+            x : x + width * halfInverseScale,
+            y : y + height * halfInverseScale,
         };
     };
 
@@ -215,16 +221,31 @@ export class Text extends Component {
 }
 
 Text.propTypes = {
-    x : React.PropTypes.number.isRequired,
-    y : React.PropTypes.number.isRequired,
-    width : React.PropTypes.number.isRequired,
-    height : React.PropTypes.number.isRequired,
+    x : React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+    ]).isRequired,
+    y : React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+    ]).isRequired,
+    width : React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+    ]).isRequired,
+    height : React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number,
+    ]).isRequired,
     textAlign : React.PropTypes.oneOf(['left', 'right', 'center']),
     verticalAlign : React.PropTypes.oneOf(['top', 'bottom', 'middle']),
     color : React.PropTypes.string,
     scale : React.PropTypes.number, //0...1
     group : React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
     debugMode : React.PropTypes.bool,
+    onClick : React.PropTypes.func,
+    onMouseOver : React.PropTypes.func,
+    onMouseOut : React.PropTypes.func,
 };
 
 Text.defaultProps = {
@@ -232,7 +253,7 @@ Text.defaultProps = {
     verticalAlign : 'middle',
     scale : 1,
     x : 0,
-    y : 0
+    y : 0,
 };
 
 Text.contextTypes = contextTypes;

@@ -2,7 +2,7 @@
 
 #See DEMO
 https://mrcheater.github.io/text-resize-and-word-wrap-provider/
-[![image](https://mrcheater.github.io/text-resize-and-word-wrap-provider/demo.png)](https://mrcheater.github.io/text-resize-and-word-wrap-provider/)
+[![Demo](https://mrcheater.github.io/text-resize-and-word-wrap-provider/demo.png)](https://mrcheater.github.io/text-resize-and-word-wrap-provider/)
 
 #See DEMO SOURCES
 https://github.com/MrCheater/text-resize-and-word-wrap-provider/tree/master/src/demo
@@ -70,17 +70,27 @@ import {
 
 ## PropTypes
 ```javascript
+type CSSUnitString = oneOfTypes([
+    Number,
+    String /(^-?\d*\.?\d+)(cm|mm|in|px|pt|pc)?$/
+])
+// CSSUnitString.Example:
+// 96, '1in', '2.54cm', '25.4mm', '72pt', '6pc', '96px', '96'
+
 Text.propTypes = {
-    x : React.PropTypes.number.isRequired,
-    y : React.PropTypes.number.isRequired,
-    width : React.PropTypes.number.isRequired,
-    height : React.PropTypes.number.isRequired,
-    textAlign : React.PropTypes.oneOf(['left', 'right', 'center']),
-    verticalAlign : React.PropTypes.oneOf(['top', 'bottom', 'middle']),
-    color : React.PropTypes.string,
-    scale : React.PropTypes.number, //0...1
-    group : React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    debugMode : React.PropTypes.bool,
+    x : CSSUnitString,
+    y : CSSUnitString,
+    width : CSSUnitString,
+    height : CSSUnitString,
+    textAlign : oneOf(['left', 'right', 'center']),
+    verticalAlign : oneOf(['top', 'bottom', 'middle']),
+    color : String,
+    scale : Number, //0...1
+    group : oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    debugMode : Bool,
+    onClick : Function,
+    onMouseOver : Function,
+    onMouseOut : Function,
 };
 
 Text.defaultProps = {
@@ -88,7 +98,7 @@ Text.defaultProps = {
     verticalAlign : 'middle',
     scale : 1,
     x : 0,
-    y : 0
+    y : 0,
 };
 ```
 ##Text + Context Provider
