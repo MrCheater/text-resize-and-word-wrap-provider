@@ -29,7 +29,8 @@ const tabBodyStyle = {
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: '#aaaaaa',
-    borderTopColor: '#dddddd'
+    borderTopColor: '#dddddd',
+    padding: '10px',
 };
 
 const containerStyle = {

@@ -31,7 +31,7 @@
     "webpack": "1.14.0"
   },
   "dependencies": {
-    "parse-absolute-css-unit": "^1.0.0",
+    "parse-absolute-css-unit": "^1.0.1",
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
   },

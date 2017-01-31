@@ -20,6 +20,12 @@ import { DemoSupportTagA } from './DemoSupportTagA';
 import DemoSupportTagACode from '!raw-loader!./DemoSupportTagA';
 import { DemoMouseEvents } from './DemoMouseEvents';
 import DemoMouseEventsCode from '!raw-loader!./DemoMouseEvents';
+import { DemoRotation } from './DemoRotation';
+import DemoRotationCode from '!raw-loader!./DemoRotation';
+import { DemoMouseCursor } from './DemoMouseCursor';
+import DemoMouseCursorCode from '!raw-loader!./DemoMouseCursor';
+import { DemoStroke } from './DemoStroke';
+import DemoStrokeCode from '!raw-loader!./DemoStroke';
 import { Demo } from './Demo';
 
 ReactDOM.render((
@@ -74,9 +80,21 @@ ReactDOM.render((
             result = {DemoMouseEvents}
             code = {DemoMouseEventsCode}
         />
-        <h1>Demo Rotation</h1>
-        <h1>Demo Mouse Cursor</h1>
-        <h1>Demo Stroke</h1>
+        <Demo
+            title = 'Demo Rotation'
+            result = {DemoRotation}
+            code = {DemoRotationCode}
+        />
+        <Demo
+            title = 'Demo Mouse Cursor'
+            result = {DemoMouseCursor}
+            code = {DemoMouseCursorCode}
+        />
+        <Demo
+            title = 'Demo Stroke'
+            result = {DemoStroke}
+            code = {DemoStrokeCode}
+        />
         <h1>Demo Line-height/Word-spacing</h1>
         <h1>Demo Max Number Of Rows</h1>
     </div>
