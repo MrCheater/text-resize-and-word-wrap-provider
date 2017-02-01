@@ -34,7 +34,7 @@ export function setFontSizeAndWordWrap(group, fontSize) {
                     }
                     breakLine = true;
                 } else if(spaceElement) {
-                    spaceElement.setAttribute('style', '');
+                    spaceElement.removeAttribute('style');
                 }
                 const element = refs[key];
                 const row = rows[rowIndex];

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function makeLink(word, href, target, fill, textDecoration, fontWeight, fontStyle, cursor, stroke, strokeWidth, strokeOpacity) {
+export function makeLink(word, href, target, fill, textDecoration, fontWeight, fontStyle, cursor) {
     return (
         <a
             href = {href}
@@ -9,10 +9,7 @@ export function makeLink(word, href, target, fill, textDecoration, fontWeight, f
             textDecoration = {textDecoration}
             fontWeight = {fontWeight}
             fontStyle = {fontStyle}
-            cursor = {cursor}
-            stroke = {stroke}
-            strokeWidth = {strokeWidth}
-            strokeOpacity = {strokeOpacity}
+            cursor = 'pointer'
         >
             {word}
         </a>

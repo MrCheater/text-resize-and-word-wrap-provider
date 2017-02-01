@@ -81,7 +81,6 @@ DemoMouseCursor.defaultProps = {
     width: 480,
     height: 280,
     backgroundColor: '#DDDDDD',
-    textScale: 0.95
 };
 
 

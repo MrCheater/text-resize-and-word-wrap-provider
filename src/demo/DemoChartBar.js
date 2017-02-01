@@ -31,8 +31,8 @@ export class DemoChartBar extends React.Component {
                 y : barY,
                 height : barHeight,
                 width : barWidth,
-                fill : randomColors[barIndex],
-                text : randomTexts[barIndex],
+                fill : randomColors[barIndex % randomColors.length],
+                text : randomTexts[barIndex % randomTexts.length],
                 value,
                 textValueX : barIndex * itemWidth + dx,
                 textValueY : barY - this.props.textValueHeight,
@@ -114,7 +114,7 @@ export class DemoChartBar extends React.Component {
 }
 
 DemoChartBar.defaultProps = {
-    width: 480,
+    width: 460,
     height: 360,
     textScale : 0.9,
     textSeriesHeight: 25,
