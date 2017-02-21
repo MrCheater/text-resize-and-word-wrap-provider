@@ -1,16 +1,16 @@
 [![Build Status](https://travis-ci.org/MrCheater/text-resize-and-word-wrap-provider.svg?branch=master)](https://travis-ci.org/MrCheater/text-resize-and-word-wrap-provider)
 
+# Install 
+```bash
+npm install text-resize-and-word-wrap-provider
+```
+
 #See DEMO
 https://mrcheater.github.io/text-resize-and-word-wrap-provider/
 [![Demo](https://mrcheater.github.io/text-resize-and-word-wrap-provider/demo.png)](https://mrcheater.github.io/text-resize-and-word-wrap-provider/)
 
 #See DEMO SOURCES
-https://github.com/MrCheater/text-resize-and-word-wrap-provider/tree/master/src/demo
-
-# Install 
-```bash
-npm install text-resize-and-word-wrap-provider
-```
+https://github.com/MrCheater/text-resize-and-word-wrap-provider/tree/master/examples
 
 # Usage
 ```javascript

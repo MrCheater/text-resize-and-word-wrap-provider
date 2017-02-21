@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, textResizeAndWordWrap } from '../index';
+import { Text, textResizeAndWordWrap } from '../src';
 import { randomContent } from './randomContent';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';

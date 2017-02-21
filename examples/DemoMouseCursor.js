@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, textResizeAndWordWrap } from '../index';
+import { Text, textResizeAndWordWrap } from '../src';
 
 @textResizeAndWordWrap
 export class DemoMouseCursor extends React.Component {

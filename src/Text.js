@@ -1,6 +1,7 @@
 import React from 'react';
 import parseAbsoluteCSSUnit from 'parse-absolute-css-unit';
-import { TextView } from './TextView';
+import { TextCore } from './TextCore';
+import { OptionalContext } from './OptionalContext';
 
 //Cross-Browser Hack for Support Stroke
 export const Text = ({
@@ -8,33 +9,35 @@ export const Text = ({
     strokeWidth,
     strokeOpacity,
     children,
-    ...props
+    ...props,
 }) => {
     if(stroke && strokeWidth) {
         strokeWidth = parseAbsoluteCSSUnit(strokeWidth);
         return (
-            <g>
-                <g
-                    stroke = {stroke}
-                    strokeWidth = {strokeWidth}
-                    strokeOpacity = {strokeOpacity}
-                >
-                    <TextView {...props}>
-                        {children}
-                    </TextView>
-                </g>
+            <OptionalContext>
                 <g>
-                    <TextView {...props}>
+                    <g
+                        stroke = {stroke}
+                        strokeWidth = {strokeWidth}
+                        strokeOpacity = {strokeOpacity}
+                    >
+                        <TextCore {...props}>
+                            {children}
+                        </TextCore>
+                    </g>
+                    <TextCore {...props}>
                         {children}
-                    </TextView>
+                    </TextCore>
                 </g>
-            </g>
+            </OptionalContext>
         );
     } else {
         return (
-            <TextView {...props}>
-                {children}
-            </TextView>
+            <OptionalContext>
+                <TextCore {...props}>
+                    {children}
+                </TextCore>
+            </OptionalContext>
         );
     }
 };
@@ -61,7 +64,10 @@ Text.propTypes = {
     color : React.PropTypes.string,
     cursor : React.PropTypes.string,
     scale : React.PropTypes.number, //0...1
-    group : React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    group : React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.number
+    ]),
     debugMode : React.PropTypes.bool,
     onClick : React.PropTypes.func,
     onMouseOver : React.PropTypes.func,
@@ -88,5 +94,5 @@ Text.defaultProps = {
     rotationCenterX : 0.5,
     rotationCenterY : 0.5,
     cursor : 'default',
-    selectable : false
+    selectable : false,
 };

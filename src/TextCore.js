@@ -1,12 +1,11 @@
 import React from 'react';
 import parseAbsoluteCSSUnit from 'parse-absolute-css-unit';
-import { TextResizeAndWordWrapProvider } from './TextResizeAndWordWrapProvider';
-import { Component } from './helpers/Component';
-import { parser } from './helpers/parser';
-import { contextTypes } from './helpers/contextTypes';
-import { makeLink } from './helpers/makeLink';
+import { Component } from './Component';
+import { parser } from './parser';
+import { contextTypes } from './contextTypes';
+import { makeLink } from './makeLink';
 
-export class TextView extends Component {
+export class TextCore extends Component {
     constructor(props, context) {
         super(props, context);
         this.randomGroupId = `group-${Date.now() + Math.random()}`;
@@ -28,9 +27,6 @@ export class TextView extends Component {
     }
 
     prepareTextItem = (props) => {
-        if(!this.isContextReady()) {
-            return;
-        }
         const x = parseAbsoluteCSSUnit(props.x);
         const y = parseAbsoluteCSSUnit(props.y);
         const width = parseAbsoluteCSSUnit(props.width);
@@ -67,25 +63,16 @@ export class TextView extends Component {
     };
 
     componentDidUpdate() {
-        if(!this.isContextReady()) {
-            return;
-        }
         this.update();
         this.context.textResizeAndWordWrapProviderUpdateTextItem(this);
     }
 
     componentDidMount() {
-        if(!this.isContextReady()) {
-            return;
-        }
         this.update();
         this.context.textResizeAndWordWrapProviderAddTextItem(this);
     }
 
     componentWillUnmount() {
-        if(!this.isContextReady()) {
-            return;
-        }
         this.context.textResizeAndWordWrapProviderRemoveTextItem(this);
     }
 
@@ -171,14 +158,6 @@ export class TextView extends Component {
     };
 
     render() {
-        if(!this.isContextReady()) {
-            return (
-                <TextResizeAndWordWrapProvider>
-                    <Text {...this.props}/>
-                </TextResizeAndWordWrapProvider>
-            );
-        }
-
         const {
             x,
             y,
@@ -248,4 +227,4 @@ export class TextView extends Component {
     }
 }
 
-TextView.contextTypes = contextTypes;
+TextCore.contextTypes = contextTypes;

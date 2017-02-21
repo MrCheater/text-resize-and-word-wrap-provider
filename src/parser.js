@@ -20,7 +20,7 @@ export function parser(children) {
                 weight: currentResult.props.weight || 1,
                 words: [],
                 props: [],
-                index: currentResult.index
+                index: currentResult.index,
             };
         }
         currentValue.words.push(currentResult.word);

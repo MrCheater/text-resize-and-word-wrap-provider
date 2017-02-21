@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './src/demo/client.js',
+    entry: './examples/client.js',
     output: {
         path: './docs',
         devtoolModuleFilenameTemplate: '[resource-path]',

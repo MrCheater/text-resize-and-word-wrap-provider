@@ -1,10 +1,10 @@
 import React from 'react';
-import { Component } from './helpers/Component';
-import { contextTypes } from './helpers/contextTypes';
-import { isServer } from './helpers/isServer';
-import { PureConnector } from './helpers/PureConnector';
-import { setFontSizeAndWordWrap } from './fontSize/setFontSizeAndWordWrap';
-import { calculateFontSize } from './fontSize/calculateFontSize';
+import { Component } from './Component';
+import { contextTypes } from './contextTypes';
+import { isServer } from './isServer';
+import { PureConnector } from './PureConnector';
+import { setFontSizeAndWordWrap } from './setFontSizeAndWordWrap';
+import { calculateFontSize } from './calculateFontSize';
 
 export class TextResizeAndWordWrapProvider extends Component {
     groups = {};

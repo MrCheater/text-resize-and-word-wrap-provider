@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, textResizeAndWordWrap } from '../index';
+import { Text, textResizeAndWordWrap } from '../src';
 import { randomContent } from './randomContent';
 import { randomSort } from './randomSort';
 

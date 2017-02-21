@@ -22,9 +22,8 @@ export function lexer(jsxText, props, results, init) {
             }
             let {
                 children,
-                ...childProps
+                ...childProps,
             } = child.props;
-            children = children || child.children;
             if(isBreakLine) {
                 children = ' ';
             }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { DemoChartBar } from './DemoChartBar';
-import { textResizeAndWordWrap } from '../index';
+import { textResizeAndWordWrap } from '../src';
 
 const style = {display:'inline-block', verticalAlign:'top'};
 
