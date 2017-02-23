@@ -40,7 +40,7 @@ module.exports = {
             }
         })
     ] : [],
-    watch : (process.env.NODE_ENV === 'production') ? false :true
+    watch : !(process.env.NODE_ENV === 'production')
 };
 
 if(process.env.TARGET === 'preact') {

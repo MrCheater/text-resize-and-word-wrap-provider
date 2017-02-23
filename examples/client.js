@@ -95,7 +95,6 @@ ReactDOM.render((
             result = {DemoStroke}
             code = {DemoStrokeCode}
         />
-        <h1>Demo Line-height/Word-spacing</h1>
         <h1>Demo Max Number Of Rows</h1>
     </div>
 ), document.getElementById('app'));

@@ -1,3 +1,5 @@
+const lineHeight = 0.95;
+
 export function setFontSizeAndWordWrap(group, fontSize) {
     for(let textItemIndex = group.length; textItemIndex--;) {
         const { textItem, refs, wordWidths, symbolHeight, symbolDy, spaceWidth } = group[textItemIndex];
@@ -10,8 +12,9 @@ export function setFontSizeAndWordWrap(group, fontSize) {
             const { weight, words } = innerText;
             const displayFontSize = (fontSize * weight)|0;
             const factor = displayFontSize / maxHeight;
+            const symbolHeightFactor = symbolHeight * factor;
             const countWords = words.length;
-            const wordHeight = symbolHeight * factor;
+            const wordHeight = symbolHeightFactor * lineHeight;
             const key = `words-${innerTextIndex}`;
             refs[key].setAttribute('font-size', displayFontSize + 'px');
             refs[key].setAttribute('fill', color ? color : 'inherit');
@@ -42,7 +45,7 @@ export function setFontSizeAndWordWrap(group, fontSize) {
                 if(breakLine) {
                     row.height = wordHeight;
                     row.x = x + wordX;
-                    row.y = y + wordY - symbolDy * factor;
+                    row.y = y + wordY - symbolDy * factor - symbolHeightFactor * (1 - lineHeight);
                     breakLine = false;
                 }
                 row.width = wordBoundsRight;
