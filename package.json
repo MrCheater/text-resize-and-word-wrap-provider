@@ -1,6 +1,6 @@
 {
   "name": "text-resize-and-word-wrap-provider",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -34,7 +34,8 @@
   "dependencies": {
     "parse-absolute-css-unit": "^1.0.1",
     "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "react-dom": "^15.0.0",
+    "react-range-proptypes": "^1.0.0"
   },
   "author": "Mr.Cheater (Anton Zhukov)",
   "license": "MIT"

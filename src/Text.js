@@ -6,6 +6,7 @@ import { makeLink } from './makeLink';
 import { contextTypes } from './contextTypes';
 import { optionalContext } from './optionalContext';
 import { optionalStroke } from './optionalStroke';
+import { range } from 'react-range-proptypes';
 
 @optionalContext
 @optionalStroke
@@ -247,7 +248,7 @@ Text.propTypes = {
     verticalAlign : React.PropTypes.oneOf(['top', 'bottom', 'middle']),
     color : React.PropTypes.string,
     cursor : React.PropTypes.string,
-    scale : React.PropTypes.number, //0...1
+    scale : range(0, 1),
     group : React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number
@@ -257,14 +258,14 @@ Text.propTypes = {
     onMouseOver : React.PropTypes.func,
     onMouseOut : React.PropTypes.func,
     rotation : React.PropTypes.number,
-    rotationCenterX : React.PropTypes.number, //0...1
-    rotationCenterY : React.PropTypes.number, //0...1,
+    rotationCenterX : range(0, 1),
+    rotationCenterY : range(0, 1),
     stroke : React.PropTypes.string,
     strokeWidth : React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
     ]),
-    strokeOpacity : React.PropTypes.number, //0...1
+    strokeOpacity : range(0, 1),
     selectable : React.PropTypes.bool,
 };
 

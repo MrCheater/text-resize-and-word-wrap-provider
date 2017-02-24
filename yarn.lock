@@ -2750,6 +2750,10 @@ react-lite@^0.15.33:
   version "0.15.33"
   resolved "https://registry.yarnpkg.com/react-lite/-/react-lite-0.15.33.tgz#43d08c7f873ca785301ae55b08e76bfb9d1f2e0b"
 
+react-range-proptypes@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-range-proptypes/-/react-range-proptypes-1.0.0.tgz#902446aa104494e2c8d16cdbf6b92bdd06cfddba"
+
 react@^15.0.0:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react/-/react-15.4.2.tgz#41f7991b26185392ba9bae96c8889e7e018397ef"
