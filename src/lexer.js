@@ -12,6 +12,9 @@ export function lexer(jsxText, props, results, init) {
     const countChildren = jsxText.length;
     for(let childIndex = 0; childIndex < countChildren; childIndex++) {
         const child = jsxText[childIndex];
+        if(child === null) {
+            continue;
+        }
         if(React.isValidElement(child)) {
             const type = child.type || child.nodeName;
             const isDiv = type === 'div';
