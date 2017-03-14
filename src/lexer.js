@@ -16,7 +16,7 @@ export function lexer(jsxText, props, results, init) {
             continue;
         }
         if(React.isValidElement(child)) {
-            const type = child.type || child.nodeName;
+            const type = child.type;
             const isDiv = type === 'div';
             const isBreakLine = type === 'br';
             const isTagA = props.isTagA || (type === 'a');

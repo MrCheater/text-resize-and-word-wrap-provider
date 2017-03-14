@@ -31,7 +31,7 @@ export class Text extends Component {
         const halfInverseScale = (1 - props.scale) / 2;
         this.textItem = {
             ...props,
-            value : parser(props.children || ''),
+            value : parser(props.children || '', this.props),
             group : props.group || this.randomGroupId,
             width : width * props.scale,
             height : height * props.scale,
@@ -95,13 +95,11 @@ export class Text extends Component {
                 onMouseOut,
                 cursor,
                 stroke : _stroke,
-                strokeWidth : _strokeWidth,
-            } = {
-                ...this.props,
-                ...props[wordIndex],
-            };
+                strokeWidth : _strokeWidth1,
+                'stroke-width' : _strokeWidth2, //preact hack
+            } = props[wordIndex];
 
-            const strokeWidth = parseAbsoluteCSSUnit(_strokeWidth);
+            const strokeWidth = parseAbsoluteCSSUnit(_strokeWidth1 || _strokeWidth2);
             const stroke = _stroke || '#FFFFFF';
 
             const textDecoration = (overline || underline || lineThrough) ? (
@@ -139,7 +137,8 @@ export class Text extends Component {
                         `${Math.cos(angle)*strokeWidth}px ${Math.sin(angle)*strokeWidth}px 0 ${stroke}`
                      );
                 }
-                textShadow = textShadow.join(', ')
+                textShadow = textShadow.join(', ');
+                console.log(textShadow);
             }
 
             wordsAndSpaces.push(

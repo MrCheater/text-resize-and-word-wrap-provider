@@ -1,8 +1,8 @@
 import { lexer } from './lexer';
 
-export function parser(children) {
+export function parser(children, props) {
     const results = [];
-    lexer(children, {}, results, true);
+    lexer(children, props, results, true);
     const countResults = results.length;
     let valueIndex = -1;
     const value = [];
