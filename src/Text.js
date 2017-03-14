@@ -2,14 +2,11 @@ import React from 'react';
 import parseAbsoluteCSSUnit from 'parse-absolute-css-unit';
 import { Component } from './Component';
 import { parser } from './parser';
-import { makeLink } from './makeLink';
 import { contextTypes } from './contextTypes';
 import { optionalContext } from './optionalContext';
-import { optionalStroke } from './optionalStroke';
 import { range } from 'react-range-proptypes';
 
 @optionalContext
-@optionalStroke
 export class Text extends Component {
     static contextTypes = contextTypes;
 
@@ -97,7 +94,15 @@ export class Text extends Component {
                 onMouseOver,
                 onMouseOut,
                 cursor,
-            } = props[wordIndex];
+                stroke : _stroke,
+                strokeWidth : _strokeWidth,
+            } = {
+                ...this.props,
+                ...props[wordIndex],
+            };
+
+            const strokeWidth = parseAbsoluteCSSUnit(_strokeWidth);
+            const stroke = _stroke || '#FFFFFF';
 
             const textDecoration = (overline || underline || lineThrough) ? (
                     `${overline ? 'overline ' : ''} ${underline ? 'underline ' : ''} ${lineThrough ? 'line-through ' : ''}`
@@ -108,9 +113,35 @@ export class Text extends Component {
             let word = words[wordIndex];
             let space = '\u00A0';
             if(isTagA) {
-                word = makeLink(word, href, target, color, textDecoration, fontWeight, fontStyle, cursor);
-                space = makeLink(space, href, target, color, textDecoration, fontWeight, fontStyle, cursor);
+                word = (
+                    <a
+                        href = {href}
+                        target = {target}
+                    >
+                        {word}
+                    </a>
+                );
+                space = (
+                    <a
+                        href = {href}
+                        target = {target}
+                    >
+                        {space}
+                    </a>
+                );
             }
+
+            let textShadow;
+            if(strokeWidth) {
+                textShadow = [];
+                for(let angle = 0; angle < 2 * Math.PI; angle += 1 / strokeWidth) {
+                     textShadow.push(
+                        `${Math.cos(angle)*strokeWidth}px ${Math.sin(angle)*strokeWidth}px 0 ${stroke}`
+                     );
+                }
+                textShadow = textShadow.join(', ')
+            }
+
             wordsAndSpaces.push(
                 <tspan
                     x = '0px'
@@ -118,14 +149,17 @@ export class Text extends Component {
                     key = {`word-${wordIndex}`}
                     ref = {`word-${innerTextIndex}-${wordIndex}`}
                     fill = {color}
-                    textDecoration = {textDecoration}
-                    fontWeight = {fontWeight}
-                    fontStyle = {fontStyle}
                     onClick = {onClick}
                     onMouseOver = {onMouseOver}
                     onMouseOut = {onMouseOut}
-                    cursor = {cursor}
-                    style = {{display : 'initial'}}
+                    style = {{
+                        display : 'initial',
+                        textShadow,
+                        textDecoration,
+                        fontWeight,
+                        fontStyle,
+                        cursor
+                    }}
                 >
                     {word}
                 </tspan>
@@ -135,12 +169,15 @@ export class Text extends Component {
                     <tspan
                         key = {`space-${wordIndex}`}
                         ref = {`space-${innerTextIndex}-${wordIndex}`}
-                        textDecoration = {isSpanEnd ? 'inherit' : textDecoration}
+
                         onClick = {onClick}
                         onMouseOver = {onMouseOver}
                         onMouseOut = {onMouseOut}
-                        cursor = {cursor}
-                        style = {{display : 'initial'}}
+                        style = {{
+                            display : 'initial',
+                            textDecoration : isSpanEnd ? 'inherit' : textDecoration,
+                            cursor
+                        }}
                     >
                         {space}
                     </tspan>
@@ -187,11 +224,9 @@ export class Text extends Component {
         return (
             <g
                 style = {style}
-                fill = {this.props.color}
                 onClick = {onClick}
                 onMouseOver = {onMouseOver}
                 onMouseOut = {onMouseOut}
-                cursor = {cursor}
                 transform = {rotation ? `rotate(${rotation} ${x + width * rotationCenterX} ${y + height * rotationCenterY})` : undefined}
             >
                 {debugMode ? (
@@ -265,7 +300,6 @@ Text.propTypes = {
         React.PropTypes.string,
         React.PropTypes.number,
     ]),
-    strokeOpacity : range(0, 1),
     selectable : React.PropTypes.bool,
 };
 

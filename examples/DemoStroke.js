@@ -20,12 +20,43 @@ export class DemoStroke extends React.Component {
                         x = {0}
                         y = {0}
                         width = {this.props.width}
-                        height = {this.props.height}
+                        height = {this.props.height / 2}
                         stroke = 'red'
                         strokeWidth = {5}
                         scale = {this.props.textScale}
                     >
                         {randomContent.longText}
+                    </Text>
+                    <Text
+                        x = {0}
+                        y = {this.props.height / 2}
+                        width = {this.props.width}
+                        height = {this.props.height / 2}
+                        scale = {this.props.textScale}
+                    >
+                        <div
+                            stroke = 'blue'
+                            strokeWidth = {3}
+                        >
+                            Some text
+                        </div>
+                        <div>
+                            <span
+                                stroke = 'green'
+                                strokeWidth = {2}
+                            >
+                                Some
+                            </span>
+                            <span>
+                                text
+                            </span>
+                            <span
+                                stroke = 'red'
+                                strokeWidth = {1}
+                            >
+                                text
+                            </span>
+                        </div>
                     </Text>
                 </svg>
             </div>

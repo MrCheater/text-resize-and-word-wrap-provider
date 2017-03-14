@@ -33,11 +33,11 @@ export function setFontSizeAndWordWrap(group, fontSize) {
                     wordBoundsRight = wordX + wordWidth;
                     wordBoundsBottom = wordY + wordHeight;
                     if(spaceElement) {
-                        spaceElement.setAttribute('style', 'display: none;');
+                        spaceElement.setAttribute('style', spaceElement.getAttribute('style').replace('initial', 'none'));
                     }
                     breakLine = true;
                 } else if(spaceElement) {
-                    spaceElement.removeAttribute('style');
+                    spaceElement.setAttribute('style', spaceElement.getAttribute('style').replace('none', 'initial'));
                 }
                 const element = refs[key];
                 const row = rows[rowIndex];
